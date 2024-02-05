@@ -120,9 +120,9 @@ class MVTecTrainDataset(Dataset):
         
 
         #foreground path of textural classes
-        foreground_path = os.path.join(args["mvtec_root_path"],'carpet')
-        self.textural_foreground_path = sorted(glob.glob(foreground_path +"/thresh/*.png"))
-
+        #foreground_path = os.path.join(args["mvtec_root_path"],'carpet')
+        #self.textural_foreground_path = sorted(glob.glob(foreground_path +"/thresh/*.png"))
+        self.textural_foreground_path = self.anomaly_source_paths
         
 
     
