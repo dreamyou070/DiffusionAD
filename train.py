@@ -265,7 +265,8 @@ def main(args):
     for sub_class in current_classes:
         print(f' (2.1) dataset of {sub_class}')
         subclass_path = os.path.join(args["mvtec_root_path"],sub_class)
-        training_dataset = MVTecTrainDataset(subclass_path, sub_class,
+        training_dataset = MVTecTrainDataset(subclass_path,
+                                             sub_class,
                                              img_size=args["img_size"],args=args)
         testing_dataset = MVTecTestDataset(subclass_path,sub_class,img_size=args["img_size"],)
         class_type='MVTec'

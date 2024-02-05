@@ -76,11 +76,14 @@ class MVTecTrainDataset(Dataset):
 
         self.classname=classname
         self.root_dir = os.path.join(data_path,'train','good')
+        print(f'root_dir : {self.root_dir}')
         self.resize_shape = [img_size[0], img_size[1]]
         self.anomaly_source_path = args["anomaly_source_path"]
 
         self.image_paths = sorted(glob.glob(self.root_dir+"/*.png"))
+        print(f'len images : {len(self.image_paths)}')
         self.anomaly_source_paths = sorted(glob.glob(self.anomaly_source_path+"/images/*/*.png"))
+        print(f'len anomaly images : {len(self.anomaly_source_paths)}')
 
         self.augmenters = [iaa.GammaContrast((0.5, 2.0), per_channel=True),
                            iaa.MultiplyAndAddToBrightness(
