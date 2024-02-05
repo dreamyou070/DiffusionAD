@@ -280,7 +280,8 @@ class MVTecTrainDataset(Dataset):
         anomaly_mask = np.transpose(anomaly_mask, (2, 0, 1))
 
 
-        sample = {'image': image, "anomaly_mask": anomaly_mask,
+        sample = {'image': image, # np array
+                  "anomaly_mask": anomaly_mask,
                   'augmented_image': augmented_image, 'has_anomaly': has_anomaly, 'idx': idx}
 
         return sample
