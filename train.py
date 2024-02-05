@@ -108,17 +108,13 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
 
             # -----------------------------------------------------------------------------------------------------------
             # [1] get sample
-            aug_image=sample['augmented_image'].to(device)
-            anomaly_mask = sample["anomaly_mask"].to(device)
-            anomaly_label = sample["has_anomaly"].to(device).squeeze()
-
-            print(f'aug_image shape: {aug_image.shape}')
-            print(f'anomaly_mask shape: {anomaly_mask.shape}')
-            print(f'anomaly_label shape: {anomaly_label.shape}')
+            aug_image=sample['augmented_image'].to(device)              # [batch, 3, 256, 256]
+            anomaly_mask = sample["anomaly_mask"].to(device)            # [batch, 1, 256, 256]
+            anomaly_label = sample["has_anomaly"].to(device).squeeze()  # [batch]
 
             noise_loss, pred_x0,normal_t, x_normal_t, x_noiser_t = ddpm_sample.norm_guided_one_step_denoising(unet_model,
                                                                             aug_image, anomaly_label,args)
-            seg_input = torch.cat((aug_image, pred_x0), dim=1)
+            seg_input = torch.cat((aug_image, pred_x0), dim=1)          # [batch, 6, 64, 64]
             print(f'seg_input shape (batch, 6, 64, 64) : {seg_input.shape}')
             pred_mask = seg_model(torch.cat((aug_image, pred_x0), dim=1))
             print(f'pred_mask shape (batch, 1, 64, 64) : {pred_mask.shape}')
