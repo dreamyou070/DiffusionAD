@@ -67,8 +67,7 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
                                           img_channels=in_channels)
 
     seg_model=SegmentationSubNetwork(in_channels=6,
-                                     out_channels=1,
-                                     base_width = 64).to(device)
+                                     out_channels=1,).to(device)
 
 
     optimizer_ddpm = optim.Adam( unet_model.parameters(),lr=args['diffusion_lr'],weight_decay=args['weight_decay'])
@@ -107,6 +106,8 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
         tbar = tqdm(training_dataset_loader)
         for i, sample in enumerate(tbar):
 
+            # -----------------------------------------------------------------------------------------------------------
+            # [1] get sample
             aug_image=sample['augmented_image'].to(device)
             anomaly_mask = sample["anomaly_mask"].to(device)
             anomaly_label = sample["has_anomaly"].to(device).squeeze()
@@ -116,7 +117,7 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
             print(f'anomaly_label shape: {anomaly_label.shape}')
 
             noise_loss, pred_x0,normal_t, x_normal_t, x_noiser_t = ddpm_sample.norm_guided_one_step_denoising(unet_model,
-                                                                                          aug_image, anomaly_label,args)
+                                                                            aug_image, anomaly_label,args)
             seg_input = torch.cat((aug_image, pred_x0), dim=1)
             print(f'seg_input shape (batch, 6, 64, 64) : {seg_input.shape}')
             pred_mask = seg_model(torch.cat((aug_image, pred_x0), dim=1))
