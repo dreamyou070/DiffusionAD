@@ -71,7 +71,8 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
                                           img_channels=in_channels)
 
     seg_model=SegmentationSubNetwork(in_channels=6,
-                                     out_channels=1).to(device)
+                                     out_channels=1,
+                                     base_width = 64).to(device)
 
 
     optimizer_ddpm = optim.Adam( unet_model.parameters(),lr=args['diffusion_lr'],weight_decay=args['weight_decay'])
