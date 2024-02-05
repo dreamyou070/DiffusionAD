@@ -21,7 +21,7 @@
   "visa_root_path":"datasets/VisA_1class/1cls",
   "dagm_root_path":"datasets/dagm",
   "mpdd_root_path":"datasets/mpdd",
-  "anomaly_source_path":"datasets/DTD",
+  "anomaly_source_path":"../../MyData/anomaly_detection/MVTec3D-AD/bagel/train/anomal_second",
   "noisier_t_range":600,
   "less_t_range":300,
   "condition_w":1,
