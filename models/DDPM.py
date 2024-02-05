@@ -357,6 +357,7 @@ class GaussianDiffusionModel:
         pred_x_t_noisier = self.sample_q(pred_x_0_noisier, normal_t, estimate_noise_normal)   
 
         # Only calculate the noise loss of normal samples according to formula 9.
+        # is anomal label == 0, there is no anomaly
         loss = (normal_loss["loss"]+noisier_loss["loss"])[anomaly_label==0].mean()
         # When the batch size is small, it may lead to an entire batch consisting solely of abnormal samples
         # If they are all abnormal samples, set loss to 0.

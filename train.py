@@ -5,16 +5,13 @@ import json
 import numpy as np
 from torch import optim
 from torch.utils.data import DataLoader
-from models.Recon_subnetwork import UNetModel, update_ema_params
+from models.Recon_subnetwork import UNetModel
 from models.Seg_subnetwork import SegmentationSubNetwork
 from tqdm import tqdm
 import torch.nn as nn
-from data.dataset_beta_thresh import MVTecTrainDataset,MVTecTestDataset,VisATrainDataset,VisATestDataset,DAGMTrainDataset,DAGMTestDataset,MPDDTestDataset,MPDDTrainDataset
-from math import exp
+from data.dataset_beta_thresh import MVTecTrainDataset,MVTecTestDataset
 import torch.nn.functional as F
 from models.DDPM import GaussianDiffusionModel, get_beta_schedule
-from scipy.ndimage import gaussian_filter
-from skimage.measure import label, regionprops
 from sklearn.metrics import roc_auc_score,auc,average_precision_score
 import pandas as pd
 from collections import defaultdict
@@ -65,7 +62,7 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
                            in_channels=in_channels).to(device)
 
     betas = get_beta_schedule(args['T'], args['beta_schedule'])
-    ddpm_sample =  GaussianDiffusionModel(args['img_size'], betas, loss_weight=args['loss_weight'],
+    ddpm_sample = GaussianDiffusionModel(args['img_size'], betas, loss_weight=args['loss_weight'],
                                           loss_type=args['loss-type'], noise=args["noise_fn"],
                                           img_channels=in_channels)
 
@@ -256,7 +253,7 @@ def save(unet_model,seg_model, args,final,epoch,sub_class):
     
     
 
-def main():
+def main(args):
 
     print(f' step 1. set class')
     mvtec_classes = ['carpet', 'grid', 'leather', 'tile', 'wood', 'bottle', 'cable', 'capsule', 'hazelnut', 'metal_nut',
