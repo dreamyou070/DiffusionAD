@@ -58,11 +58,10 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
 
     in_channels = args["channels"]
     unet_model = UNetModel(args['img_size'][0],
-                           args['base_channels'],
+                           args['base_channels'],                    # 128
                            channel_mults=args['channel_mults'],
                            dropout=args["dropout"],
-                           n_heads=args["num_heads"],
-                           n_head_channels=args["num_head_channels"],
+                           n_heads=args["num_heads"], n_head_channels=args["num_head_channels"],
                            in_channels=in_channels).to(device)
 
     betas = get_beta_schedule(args['T'], args['beta_schedule'])
@@ -115,8 +114,16 @@ def train(training_dataset_loader, testing_dataset_loader, args, data_len,sub_cl
             anomaly_mask = sample["anomaly_mask"].to(device)
             anomaly_label = sample["has_anomaly"].to(device).squeeze()
 
-            noise_loss, pred_x0,normal_t,x_normal_t,x_noiser_t = ddpm_sample.norm_guided_one_step_denoising(unet_model, aug_image, anomaly_label,args)
+            print(f'aug_image shape: {aug_image.shape}')
+            print(f'anomaly_mask shape: {anomaly_mask.shape}')
+            print(f'anomaly_label shape: {anomaly_label.shape}')
+
+            noise_loss, pred_x0,normal_t, x_normal_t, x_noiser_t = ddpm_sample.norm_guided_one_step_denoising(unet_model,
+                                                                                          aug_image, anomaly_label,args)
+            seg_input = torch.cat((aug_image, pred_x0), dim=1)
+            print(f'seg_input shape (batch, 6, 64, 64) : {seg_input.shape}')
             pred_mask = seg_model(torch.cat((aug_image, pred_x0), dim=1))
+            print(f'pred_mask shape (batch, 1, 64, 64) : {pred_mask.shape}')
 
             #loss
             focal_loss = loss_focal(pred_mask,anomaly_mask)

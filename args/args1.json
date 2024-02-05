@@ -1,5 +1,4 @@
-{
-  "img_size": [256,256],
+{ "img_size": [256,256],
   "Batch_Size": 16,
   "EPOCHS": 3000,
   "T": 1000,
@@ -28,6 +27,4 @@
   "condition_w":1,
   "eval_normal_t":200,
   "eval_noisier_t":400,
-  "output_path":"outputs"
-
-}
+  "output_path":"outputs"}
