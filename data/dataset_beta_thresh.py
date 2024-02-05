@@ -82,7 +82,7 @@ class MVTecTrainDataset(Dataset):
 
         self.image_paths = sorted(glob.glob(self.root_dir+"/*.png"))
         print(f'len images : {len(self.image_paths)}')
-        self.anomaly_source_paths = sorted(glob.glob(self.anomaly_source_path+"/images/*/*.png"))
+        self.anomaly_source_paths = sorted(glob.glob(self.anomaly_source_path+"/*/*.png"))
         print(f'len anomaly images : {len(self.anomaly_source_paths)}')
 
         self.augmenters = [iaa.GammaContrast((0.5, 2.0), per_channel=True),
